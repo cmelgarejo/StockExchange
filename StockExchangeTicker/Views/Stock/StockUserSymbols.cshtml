@@ -1,0 +1,34 @@
+﻿@using StockExchangeModel;
+
+@using (Html.BeginForm("UnRegisterSymbol", "", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<div class="select-symbol">
+    <table class="table table-bordered table-condensed table-responsive table-striped">
+        <thead>
+            <tr>
+                <td>Stock Symbol</td>
+                <td>Latest Price</td>
+            </tr>
+        </thead>
+        @foreach (StockPriceHistory stock in Model)
+        {
+            <tr>
+                <td>@stock.Symbol</td>
+                <td>@stock.Price</td>
+                <td>
+                    <button type="submit" class="btn btn-danger " id="symbol" name="symbol" value="@stock.Symbol" title="Remove @stock.Symbol from your Stock List">
+                        <span>
+                            <i class="glyphicon glyphicon-trash">
+
+                            </i>
+
+                        </span>
+                        
+                    </button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+}

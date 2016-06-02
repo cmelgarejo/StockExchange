@@ -1,0 +1,53 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.select-symbol {
+    max-height: 400px;
+    min-height: 400px;
+    overflow-y: scroll;
+}
+
+.chart-container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  height: 250px;
+}
+@media (min-width: 768px) {
+  .chart-container  {
+    width: 650px;
+  }
+}
+@media (min-width: 992px) {
+  .chart-container  {
+    width: 870px;
+  }
+}
+@media (min-width: 1200px) {
+  .chart-container  {
+    width: 1070px;
+  }
+}

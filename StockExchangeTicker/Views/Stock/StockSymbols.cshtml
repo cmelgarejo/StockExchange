@@ -1,0 +1,29 @@
+﻿@using StockExchangeTicker.StockExchangeService
+@using (Html.BeginForm("RegisterSymbol", "", FormMethod.Post ))
+{
+    @Html.AntiForgeryToken()
+<div class="select-symbol">
+    <table class="table table-bordered table-condensed table-responsive table-striped">
+        <thead>
+            <tr>
+                <td>Symbol</td><td>Company Name</td><td>Industry</td><td>IPOYear</td><td>MarketCap</td>
+            </tr>
+        </thead>
+        @foreach (StockSymbol stockSymbol in Model)
+        {
+            <tr>
+                <td>
+                @if (Request.IsAuthenticated)
+                {
+                    <button type="submit" class="btn btn-default" id="symbol" name="symbol" value="@stockSymbol.Symbol" title="Add @(stockSymbol.Symbol) to your Stock List">@stockSymbol.Symbol</button>
+                }
+                else
+                {
+                    @stockSymbol.Symbol
+                }
+                </td><td>@stockSymbol.Name</td><td>@stockSymbol.Industry</td><td>@stockSymbol.IPOYear</td><td>@stockSymbol.MarketCap</td>
+            </tr>
+        }
+    </table>
+</div>
+}

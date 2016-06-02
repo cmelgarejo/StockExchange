@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+@if (!Request.IsAuthenticated)
+{
+    <h2>Welcome to Stock Exchange!</h2>
+    <p class="lead">Stock Exchange allows you to follow the stock prices of the companies you are interested on.</p>
+}
+else
+{
+    <div id="chart">
+        @Html.Action("StockUserSymbolPriceHistoryChart")
+    </div>
+}
+</div>
+
+<div class="row">
+    
+@if (Request.IsAuthenticated)
+{
+    <div id="StockUserSymbols"class="col-md-5">
+        @Html.Action("StockUserSymbols")
+    </div>
+}
+    <div @(Request.IsAuthenticated ? "class='col-md-7'" : "class='col-md-12'") >
+        @Html.Action("StockSymbols")
+    </div>
+</div>
+
+<script>
+    function updateStockUserSymbols() {
+        $.get('@(Url.Action("StockUserSymbols"))').success(function _updateStockUserSymbols(html, status) {
+            if (status == 'success') {
+                $('#StockUserSymbols').html(html);
+                updateStockUserSymbolsPriceHistoryChart(); //Let's update the chart, too
+            }
+        })
+    }
+    function updateStockUserSymbolsPriceHistoryChart() {
+        $.get('@(Url.Action("StockUserSymbolPriceHistoryChart"))').success(function _updateStockUserSymbolsPriceHistoryChart(html, status) {
+            if (status == 'success') {
+                $('#chart').html(html);
+            }
+        })
+    }
+    $(document).ready(function ready() {
+        setInterval(updateStockUserSymbols, 10 * 1000); //Update every 10 seconds
+    });
+</script>

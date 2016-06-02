@@ -1,0 +1,35 @@
+﻿@using Chart.Mvc.Extensions
+@using Chart.Mvc.ComplexChart
+@using StockExchangeModel
+@{
+    LineChart lineChart = new LineChart();
+    lineChart.ChartConfiguration.MultiTooltipTemplate = "<%= datasetLabel  %> - <%= value %>";
+    lineChart.ChartConfiguration.Animation = false;
+    List<StockPriceHistory> historyPrice = (Model as List<StockPriceHistory>);
+    //Group the dataset by time first, then order ascending, to have the labels for the x axis.
+    var timeLabels = historyPrice.GroupBy(h => h.Created_at.ToString("HH:mm:ss")).OrderBy(h => h.First().Created_at).Select(h => h.First().Created_at.ToString("HH:mm:ss")).ToList();
+    lineChart.ComplexData.Labels.AddRange(timeLabels);
+    var groups = historyPrice.GroupBy(h => h.Symbol).Select(h => h.First().Symbol);
+    foreach (var groupName in groups)
+    {
+        List<double> groupValues = historyPrice.Where(h => h.Symbol == groupName).OrderBy(h => h.Created_at).Select(x => x.Price).ToList();
+        if (groupValues.Count < timeLabels.Count)
+        {
+            groupValues.AddRange(new List<double>((timeLabels.Count - groupValues.Count)));
+            groupValues = groupValues.OrderBy(h => h).ToList();
+        }
+        lineChart.ComplexData.Datasets.Add(new ComplexDataset()
+        {
+            Data = groupValues,
+            Label = groupName,
+            FillColor = "rgba(255,255,255,0.2)",
+            StrokeColor = "rgba(151,187,205,1)",
+            PointColor = "rgba(151,187,205,1)",
+            PointStrokeColor = "#fff",
+            PointHighlightFill = "#fff",
+            PointHighlightStroke = "rgba(151,187,205,1)"
+        });
+    }
+}
+<canvas id="UserStockPriceHistoryChart" class="chart-container"></canvas>
+@Html.CreateChart("UserStockPriceHistoryChart", lineChart)
